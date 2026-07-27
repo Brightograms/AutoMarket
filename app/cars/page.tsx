@@ -79,7 +79,7 @@ export default function CarsPage() {
               placeholder="Model or brand..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded border px-3"
+              className="w-full rounded border px-3 py-0"
             />
           </div>
 
@@ -91,7 +91,7 @@ export default function CarsPage() {
               id="brand"
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
-              className="w-full rounded border px-3 py-2"
+              className="w-full rounded border px-3 py-0.5"
             >
               {brands.map((b) => (
                 <option key={b} value={b}>
@@ -109,7 +109,7 @@ export default function CarsPage() {
               id="sort"
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="w-full rounded border px-3 py-2"
+              className="w-full rounded border px-3 py-0.5"
             >
               {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>
