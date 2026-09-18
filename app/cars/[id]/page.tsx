@@ -5,6 +5,7 @@ import { connectDB } from "@/lib/db";
 import { Car } from "@/models/Car";
 import { formatPrice, formatMileage } from "@/data/cars";
 import { serializeCars } from "@/lib/serialize";
+import { getSessionUser } from "@/lib/auth";
 import CarCard from "@/components/CarCard";
 import InquiryForm from "./InquiryForm";
 
@@ -16,7 +17,7 @@ export default async function CarPage({
   const { id } = await params;
 
   await connectDB();
-  const car = await Car.findById(id).lean();
+  const [car, user] = await Promise.all([Car.findById(id).lean(), getSessionUser()]);
 
   if (!car) {
     notFound();
@@ -65,7 +66,7 @@ export default async function CarPage({
       <Link href="/cars" className="mt-6 inline-block text-blue-600 hover:underline">
         Back to browse
       </Link>
-      <InquiryForm />
+      <InquiryForm user={user} carId={id} />
 
       {similarCars.length > 0 && (
         <section className="mt-12">

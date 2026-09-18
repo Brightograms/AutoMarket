@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { SessionUser } from "@/lib/auth";
 
-export default function Hero() {
+export default function Hero({ user }: { user: SessionUser | null }) {
   return (
     <section className="relative flex min-h-[80vh] items-center justify-center px-6 text-white">
       <div className="absolute inset-0 z-0">
@@ -36,6 +37,21 @@ export default function Hero() {
           >
             View Favorites
           </Link>
+          {user ? (
+            <Link
+              href="/admin/cars"
+              className="rounded-full border border-white/60 bg-transparent px-8 py-3 text-sm font-bold text-white transition hover:bg-white/10"
+            >
+              Manage Your Cars
+            </Link>
+          ) : (
+            <Link
+              href="/signup"
+              className="rounded-full bg-white px-8 py-3 text-sm font-bold text-black transition hover:bg-stone-200"
+            >
+              Create an Account
+            </Link>
+          )}
         </div>
       </div>
     </section>
