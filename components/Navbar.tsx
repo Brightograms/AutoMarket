@@ -9,13 +9,13 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-6 text-sm font-semibold">
-          <Link href="/" className="hover:text-stone-600">
+          <Link href="/" className="hover:text-stone-500">
             Home
           </Link>
-          <Link href="/cars" className="hover:text-stone-600">
+          <Link href="/cars" className="hover:text-stone-500">
             Browse Cars
           </Link>
-          <Link href="/favorites" className="hover:text-stone-600">
+          <Link href="/favorites" className="hover:text-stone-500">
             Favorites
           </Link>
           <Link
