@@ -18,6 +18,12 @@ export default function Navbar() {
           <Link href="/favorites" className="hover:text-stone-600">
             Favorites
           </Link>
+          <Link
+            href="/admin/cars"
+            className="rounded bg-black px-3 py-1 text-white hover:bg-stone-800"
+          >
+            Admin
+          </Link>
         </div>
       </div>
     </nav>

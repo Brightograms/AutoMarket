@@ -5,9 +5,16 @@ import Link from "next/link";
 import { formatPrice, type Car } from "@/data/cars";
 import { useFavorites } from "@/hooks/useFavorites";
 
-export default function CarCard({ car }: { car: Car }) {
+type CarCardProps = {
+  car: Car;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+};
+
+export default function CarCard({ car, isFavorite: isFavoriteProp, onToggleFavorite }: CarCardProps) {
   const { favorites, toggleFavorite } = useFavorites();
-  const isFavorite = favorites.includes(car.id);
+  const isFavorite = isFavoriteProp ?? favorites.includes(car.id);
+  const handleToggleFavorite = onToggleFavorite ?? (() => toggleFavorite(car.id));
 
   return (
     <Link href={`/cars/${car.id}`} className="relative rounded-lg border border-gray-200 shadow-md p-4">
@@ -16,7 +23,7 @@ export default function CarCard({ car }: { car: Car }) {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          toggleFavorite(car.id);
+          handleToggleFavorite();
         }}
         className="absolute right-5 top-5 rounded-full bg-white/90 p-2 text-lg shadow-sm hover:bg-white"
         aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}

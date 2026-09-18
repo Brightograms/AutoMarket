@@ -1,10 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { cars } from "@/data/cars";
+import { useEffect, useMemo, useState } from "react";
+import { type Car } from "@/data/cars";
 import CarCard from "@/components/CarCard";
-
-const brands = ["All", ...new Set(cars.map((car) => car.brand))];
 
 const sortOptions = [
   { label: "Featured first", value: "featured" },
@@ -14,12 +12,40 @@ const sortOptions = [
 ];
 
 export default function CarsPage() {
+  const [allCars, setAllCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [brand, setBrand] = useState("All");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("featured");
 
+  useEffect(() => {
+    async function fetchCars() {
+      try {
+        const response = await fetch("/api/cars");
+        if (!response.ok) {
+          throw new Error("Failed to fetch cars");
+        }
+        const data = (await response.json()) as Car[];
+        setAllCars(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCars();
+  }, []);
+
+  const brands = useMemo(
+    () => ["All", ...new Set(allCars.map((car) => car.brand))],
+    [allCars]
+  );
+
   const filteredCars = useMemo(() => {
-    let result = cars.filter((car) => {
+    let result = allCars.filter((car) => {
       const matchesBrand = brand === "All" || car.brand === brand;
 
       const searchLower = search.toLowerCase();
@@ -48,7 +74,7 @@ export default function CarsPage() {
     }
 
     return result;
-  }, [brand, search, sort]);
+  }, [allCars, brand, search, sort]);
 
   const hasActiveFilters = brand !== "All" || search !== "" || sort !== "featured";
 
@@ -57,6 +83,25 @@ export default function CarsPage() {
     setSearch("");
     setSort("featured");
   };
+
+  if (loading) {
+    return (
+      <main className="mx-auto max-w-7xl px-6 py-12">
+        <p className="text-center text-stone-600">Loading cars...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="mx-auto max-w-7xl px-6 py-12">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+          <p className="font-semibold text-red-700">Failed to load cars</p>
+          <p className="mt-2 text-red-600">{error}</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">

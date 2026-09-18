@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { cars } from "@/data/cars";
 import CarCard from "@/components/CarCard";
+import type { Car } from "@/data/cars";
 
-const featuredCars = cars.filter((car) => car.featured);
-
-export default function FeaturedCars() {
+export default function FeaturedCars({ cars }: { cars: Car[] }) {
   return (
     <section className="bg-stone-50">
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -21,11 +19,17 @@ export default function FeaturedCars() {
           </Link>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredCars.map((car) => (
-            <CarCard key={car.id} car={car} />
-          ))}
-        </div>
+        {cars.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-stone-300 bg-white py-12 text-center text-sm text-stone-500">
+            No featured cars right now — check the full listings.
+          </p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {cars.map((car) => (
+              <CarCard key={car.id} car={car} />
+            ))}
+          </div>
+        )}
 
         <div className="mt-8 sm:hidden">
           <Link

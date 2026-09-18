@@ -6,14 +6,31 @@ import HowItWorks from "@/components/sections/HowItWorks";
 import WhyAutoMarket from "@/components/sections/WhyAutoMarket";
 import WaitList from "@/components/sections/WaitList";
 import CTA from "@/components/sections/CTA";
+import { connectDB } from "@/lib/db";
+import { Car } from "@/models/Car";
+import { serializeCars } from "@/lib/serialize";
 
-export default function Home() {
+export default async function Home() {
+  await connectDB();
+
+  const [featuredCars, bodyTypeCounts, totalCars] = await Promise.all([
+    Car.find({ featured: true }).sort({ createdAt: -1 }).limit(6).lean(),
+    Car.aggregate<{ _id: string; count: number }>([
+      { $group: { _id: "$bodyType", count: { $sum: 1 } } },
+    ]),
+    Car.countDocuments(),
+  ]);
+
+  const counts = Object.fromEntries(
+    bodyTypeCounts.map(({ _id, count }) => [_id, count])
+  );
+
   return (
     <>
       <Hero />
-      <Stats />
-      <Categories />
-      <FeaturedCars />
+      <Stats vehiclesListed={totalCars} />
+      <Categories counts={counts} />
+      <FeaturedCars cars={serializeCars(featuredCars)} />
       <HowItWorks />
       <WhyAutoMarket />
       <WaitList />

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { cars } from "@/data/cars";
 
 const categories = [
   { name: "Sedans", bodyType: "Sedan" },
@@ -8,7 +7,11 @@ const categories = [
   { name: "Coupes", bodyType: "Coupe" },
 ] as const;
 
-export default function Categories() {
+export default function Categories({
+  counts,
+}: {
+  counts: Record<string, number>;
+}) {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">
       <h2 className="text-center text-3xl font-bold tracking-tight">Browse by Category</h2>
@@ -17,7 +20,7 @@ export default function Categories() {
       </p>
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {categories.map((category) => {
-          const count = cars.filter((c) => c.bodyType === category.bodyType).length;
+          const count = counts[category.bodyType] ?? 0;
           return (
             <Link
               key={category.name}

@@ -6,33 +6,35 @@ type TimeLeft = {
  minutes: string;
  seconds: string;
 };
+const launchDate = new Date("2026-09-30T00:00:00").getTime();
+
+const getTimeLeft = (): TimeLeft => {
+  const difference = launchDate - new Date().getTime();
+  if (difference <= 0) {
+    return {
+      days: "00",
+      hours: "00",
+      minutes: "00",
+      seconds: "00",
+    };
+  }
+  return {
+    days: String(
+      Math.floor(difference / (1000 * 60 * 60 * 24))
+    ).padStart(2, "0"),
+    hours: String(
+      Math.floor((difference / (1000 * 60 * 60)) % 24)
+    ).padStart(2, "0"),
+    minutes: String(
+      Math.floor((difference / (1000 * 60)) % 60)
+    ).padStart(2, "0"),
+    seconds: String(
+      Math.floor((difference / 1000) % 60)
+    ).padStart(2, "0"),
+  };
+};
+
 export default function WaitlistSection() {
- const launchDate = new Date("2026-09-30T00:00:00").getTime();
- const getTimeLeft = (): TimeLeft => {
-   const difference = launchDate - new Date().getTime();
-   if (difference <= 0) {
-     return {
-       days: "00",
-       hours: "00",
-       minutes: "00",
-       seconds: "00",
-     };
-   }
-   return {
-     days: String(
-       Math.floor(difference / (1000 * 60 * 60 * 24))
-     ).padStart(2, "0"),
-     hours: String(
-       Math.floor((difference / (1000 * 60 * 60)) % 24)
-     ).padStart(2, "0"),
-     minutes: String(
-       Math.floor((difference / (1000 * 60)) % 60)
-     ).padStart(2, "0"),
-     seconds: String(
-       Math.floor((difference / 1000) % 60)
-     ).padStart(2, "0"),
-   };
- };
  const [timeLeft, setTimeLeft] = useState(getTimeLeft());
  const [email, setEmail] = useState("");
  const [joined, setJoined] = useState(false);
@@ -70,7 +72,7 @@ export default function WaitlistSection() {
 </span>
 </h2>
 <p className="mx-auto mt-6 max-w-3xl text-center text-lg leading-8 text-gray-300">
-             Nigeria's trusted marketplace for buying and selling cars is almost here.
+             Nigeria&apos;s trusted marketplace for buying and selling cars is almost here.
              Join the waitlist today to receive early access, exclusive launch
              rewards and priority notifications.
 </p>
@@ -118,10 +120,10 @@ export default function WaitlistSection() {
            ) : (
 <div className="mx-auto mt-14 max-w-xl rounded-2xl border border-green-500/30 bg-green-500/10 p-6 text-center">
 <h3 className="text-2xl font-bold text-green-400">
-                 You're on the waitlist!
+                 You&apos;re on the waitlist!
 </h3>
 <p className="mt-3 text-gray-300">
-                 Thanks for joining. We'll notify you as soon as AutoMarket
+                 Thanks for joining. We&apos;ll notify you as soon as AutoMarket
                  launches.
 </p>
 </div>

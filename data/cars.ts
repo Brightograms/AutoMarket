@@ -1,4 +1,3 @@
-import images from "next/image";
 export type Car = {
   id: string;
   brand: string;
@@ -284,3 +283,5 @@ export function formatPrice(price: number): string {
 export function formatMileage(mileage: number): string {
   return new Intl.NumberFormat("en-US").format(mileage) + " mi";
 }
+
+export const seedCars = cars;
